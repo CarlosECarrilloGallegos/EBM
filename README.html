@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Earth Temperature Integrator (Tutorial) &#8212; A Simple Energy Balance Model</title>
+    <title>EnergyBalanceModel &#8212; A Simple Energy Balance Model</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,6 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Earth Temperature Integrator (Interactive)" href="Temp_integrator_interactive.html" />
-    <link rel="prev" title="What is an Energy Balance Model?" href="EnergyBalanceExplained.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -96,14 +94,14 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="EnergyBalanceExplained.html">
    What is an Energy Balance Model?
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Temp_Integrator_tutorial.html">
    Earth Temperature Integrator (Tutorial)
   </a>
  </li>
@@ -163,9 +161,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/Temp_Integrator_tutorial.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="_sources/README.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -183,7 +181,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/CarlosECarrilloGallegos/EBM/issues/new?title=Issue%20on%20page%20%2FTemp_Integrator_tutorial.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/CarlosECarrilloGallegos/EBM/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -199,71 +197,11 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/master?urlpath=tree/docs/Temp_Integrator_tutorial.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        <button type="button" class="btn btn-secondary topbarbtn"
-            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
-                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#objective">
-   Objective
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#variable-initial-conditions">
-   Variable Initial Conditions
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#albedo">
-     Albedo
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#solar-flux">
-     Solar Flux
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#emissivity">
-     Emissivity
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#equations">
-   Equations
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -272,36 +210,9 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="earth-temperature-integrator-tutorial">
-<h1>Earth Temperature Integrator (Tutorial)<a class="headerlink" href="#earth-temperature-integrator-tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="objective">
-<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
-<p>We want to build an integrator that evolves the Earth’s temperature over time given certain initial conditions.</p>
-<p>Our model will assume the Earth’s initial surface temperature is 0K, which is obviously a ridiculous assumption. The benefit in starting the temperature from scratch is that you can see how the initial conditions dictate the evolution of the Earth’s temperature. Eventually, our model’s temperature will level off, and energy balance will have been achieved.</p>
-<p>First, we’ll start by defining our initial conditions, and getting into the weeds of the terminology.</p>
-</div>
-<div class="section" id="variable-initial-conditions">
-<h2>Variable Initial Conditions<a class="headerlink" href="#variable-initial-conditions" title="Permalink to this headline">¶</a></h2>
-<p>There are three variable properties which dictate the evolution of the Earth’s temperature in our model:</p>
-<div class="section" id="albedo">
-<h3>Albedo<a class="headerlink" href="#albedo" title="Permalink to this headline">¶</a></h3>
-<p>The albedo, a value between 0 and 1.0, defines the percentage of energy received by a body that it reflects back. An albedo of 0.5, for instance, means that the body absorbs 50% of the energy it recieves.</p>
-<p>Earth’s average albedo is 0.32. This is a simplification, as different parts of Earth’s surface have very different albedos. For our purposes, however, this will suffice.</p>
-</div>
-<div class="section" id="solar-flux">
-<h3>Solar Flux<a class="headerlink" href="#solar-flux" title="Permalink to this headline">¶</a></h3>
-<p>How much energy the Sun the sends to the Earth, in units of watts per square meter. It varies slightly as the sun evolves, but not significantly. It is about 1373 W/m2.</p>
-</div>
-<div class="section" id="emissivity">
-<h3>Emissivity<a class="headerlink" href="#emissivity" title="Permalink to this headline">¶</a></h3>
-<p>A value between 0 and 1.0 that represents how much energy is emitted by the atmosphere. For example, if an atmosphere has an emissivity of 0.6, that means it emits 60% of the energy it recieves.</p>
-<p>The emissivity of the Earth’s atmosphere is best approximated at 0.78. This is where we make our greatest simplification. In reality, the atmosphere is extremely complex, and how much energy is absorbed depends on its chemical composition. Varying the emissivity can capture changes in the atmospheric composition loosely, and sufficiently enough for our purposes, but it’s still important to note it’s a simplification.</p>
-<p>Now that we know our variables, we can get aquainted with the equations we want to integrate.</p>
-</div>
-</div>
-<div class="section" id="equations">
-<h2>Equations<a class="headerlink" href="#equations" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="tex2jax_ignore mathjax_ignore section" id="energybalancemodel">
+<h1>EnergyBalanceModel<a class="headerlink" href="#energybalancemodel" title="Permalink to this headline">¶</a></h1>
+<p>A Simple Energy Balance Model in JupyterBooks</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -328,21 +239,7 @@
               
         
             <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="EnergyBalanceExplained.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">What is an Energy Balance Model?</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="Temp_integrator_interactive.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Earth Temperature Integrator (Interactive)</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+<div class='prev-next-area'>
 </div>
         
         </div>

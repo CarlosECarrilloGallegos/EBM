@@ -44,14 +44,14 @@
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
-        const thebe_selector = ".thebe,.cell"
-        const thebe_selector_input = "pre,.cell_input div.highlight"
-        const thebe_selector_output = ".output,.cell_output"
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Real-Time Energy Balance Model (Tutorial)" href="EnergySlider_Tutorial.html" />
+    <link rel="prev" title="Earth Temperature Integrator (Interactive)" href="Temp_integrator_interactive.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -103,17 +103,12 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_Integrator_tutorial.html">
-   Earth Temperature Integrator (Tutorial)
+   Earth Temperature Integrator (Background)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_integrator_interactive.html">
    Earth Temperature Integrator (Interactive)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="EnergySlider_Tutorial.html">
-   Real-Time Energy Balance Model (Tutorial)
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -203,7 +198,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/master?urlpath=tree/docs/EnergySlider_Interactive.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/main/v2/gh/CarlosECarrilloGallegos/EBM/main?urlpath=tree/docs/EnergySlider_Interactive.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -211,9 +206,6 @@
         
         
         
-        <button type="button" class="btn btn-secondary topbarbtn"
-            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
-                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
         
     </div>
 </div>
@@ -223,6 +215,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interactive-model-with-sliders">
+   Interactive Model with Sliders
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -233,14 +238,18 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="real-time-energy-balance-model-interactive">
 <h1>Real-Time Energy-Balance Model (Interactive)<a class="headerlink" href="#real-time-energy-balance-model-interactive" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/main"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
+<div class="section" id="interactive-model-with-sliders">
+<h2>Interactive Model with Sliders<a class="headerlink" href="#interactive-model-with-sliders" title="Permalink to this headline">¶</a></h2>
+<p>This code starts with the most normal Earth circumstances: albedo of 0.32, solar flux of 1373 watts per meter squared, and epsilon of 0.78. It then animates a line that acts as an active signal that can be adjsuted by sliders for those three properties. This serves to illustrate how the temperature is affected by changing properties.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> widget
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import libraries</span>
+<span class="o">%</span><span class="k">matplotlib</span> widget
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.widgets</span> <span class="kn">import</span> <span class="n">Slider</span><span class="p">,</span> <span class="n">Button</span>
 <span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
-<span class="kn">import</span> <span class="nn">random</span>
 </pre></div>
 </div>
 </div>
@@ -250,29 +259,33 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#constants</span>
 <span class="n">C</span> <span class="o">=</span> <span class="mf">2.08e8</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.32</span>
-<span class="n">epsilon</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#key value</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.78</span> <span class="c1">#key value</span>
 <span class="n">sigma</span> <span class="o">=</span> <span class="mf">5.67e-8</span>
-<span class="n">S</span> <span class="o">=</span> <span class="mi">1350</span>
+<span class="n">S</span> <span class="o">=</span> <span class="mi">1373</span>
+<span class="n">T_a</span> <span class="o">=</span> <span class="mf">242.4</span>
 
 
 <span class="c1">#step array</span>
 <span class="n">step</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">flux</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c1">#index = count()</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
 
+
+<span class="c1">#Create figure and make space for sliders</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Energy Balance Model&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
 <span class="c1">#Sliders</span>
+<span class="c1">#Each slider has its own axis, and takes the </span>
+<span class="c1">#min val, max val, and initial val</span>
 <span class="n">axflux</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0225</span><span class="p">,</span> <span class="mf">0.63</span><span class="p">])</span>
 <span class="n">slider_flux</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">axflux</span><span class="p">,</span>
     <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Flux&quot;</span><span class="p">,</span>
-    <span class="n">valmin</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span>
-    <span class="n">valmax</span><span class="o">=</span><span class="mi">1400</span><span class="p">,</span>
-    <span class="n">valinit</span><span class="o">=</span><span class="mi">1350</span><span class="p">,</span>
+    <span class="n">valmin</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
+    <span class="n">valmax</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span>
+    <span class="n">valinit</span><span class="o">=</span><span class="mi">1373</span><span class="p">,</span>
     <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span>
 <span class="p">)</span>
 
@@ -280,9 +293,9 @@
 <span class="n">slider_alpha</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">axalpha</span><span class="p">,</span>
     <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Albedo&quot;</span><span class="p">,</span>
-    <span class="n">valmin</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-    <span class="n">valmax</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
-    <span class="n">valinit</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">valmin</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">valmax</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">valinit</span><span class="o">=</span><span class="mf">0.32</span><span class="p">,</span>
     <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span>
 <span class="p">)</span>
 
@@ -290,17 +303,18 @@
 <span class="n">slider_emis</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">axemis</span><span class="p">,</span>
     <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Emissivity&quot;</span><span class="p">,</span>
-    <span class="n">valmin</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
-    <span class="n">valmax</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">valinit</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">valmin</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">valmax</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">valinit</span> <span class="o">=</span> <span class="mf">0.78</span><span class="p">,</span>
     <span class="n">orientation</span><span class="o">=</span> <span class="s2">&quot;horizontal&quot;</span>
 <span class="p">)</span>
 
+<span class="c1">#Animation function. Updates for each &quot;i&quot;</span>
 <span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
     <span class="n">step</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">flux</span><span class="o">.</span><span class="n">append</span><span class="p">((((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">slider_alpha</span><span class="o">.</span><span class="n">val</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">slider_flux</span><span class="o">.</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">slider_emis</span><span class="o">.</span><span class="n">val</span><span class="o">*</span><span class="n">sigma</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">)))</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span><span class="mi">320</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">flux</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
+    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">((((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">slider_alpha</span><span class="o">.</span><span class="n">val</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">slider_flux</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">slider_emis</span><span class="o">.</span><span class="n">val</span><span class="o">*</span><span class="n">sigma</span><span class="o">*</span><span class="n">T_a</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">sigma</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">220</span><span class="p">,</span><span class="mi">320</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Step&#39;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Temperature (K)&#39;</span><span class="p">)</span>
 
@@ -312,22 +326,17 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "35128baff0a54e8baa7d31278cd827e6"}
+{"model_id": "656c1a11f74e4a6887f7a223bf2a897a", "version_major": 2, "version_minor": 0}
 </script></div>
 </div>
 </div>
-
-
-<script type="application/vnd.jupyter.widget-state+json">
-{"state": {"ac5db79155b04f4fb38c53319278ac83": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "35128baff0a54e8baa7d31278cd827e6": {"model_name": "MPLCanvasModel", "model_module": "jupyter-matplotlib", "model_module_version": "^0.9.0", "state": {"_cursor": "pointer", "_dom_classes": [], "_figure_label": "Figure", "_height": 0, "_image_mode": "full", "_message": "", "_model_module": "jupyter-matplotlib", "_model_module_version": "^0.9.0", "_model_name": "MPLCanvasModel", "_rubberband_height": 0, "_rubberband_width": 0, "_rubberband_x": 0, "_rubberband_y": 0, "_view_count": null, "_view_module": "jupyter-matplotlib", "_view_module_version": "^0.9.0", "_view_name": "MPLCanvasView", "_width": 0, "capture_scroll": false, "footer_visible": true, "header_visible": true, "layout": "IPY_MODEL_ac5db79155b04f4fb38c53319278ac83", "resizable": true, "toolbar": "IPY_MODEL_e580c40d1f4b48ada381194359355667", "toolbar_position": "left", "toolbar_visible": true}}, "24b6b6edeefe4618affabfddaac2a5c9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e580c40d1f4b48ada381194359355667": {"model_name": "ToolbarModel", "model_module": "jupyter-matplotlib", "model_module_version": "^0.9.0", "state": {"_current_action": "", "_dom_classes": [], "_model_module": "jupyter-matplotlib", "_model_module_version": "^0.9.0", "_model_name": "ToolbarModel", "_view_count": null, "_view_module": "jupyter-matplotlib", "_view_module_version": "^0.9.0", "_view_name": "ToolbarView", "button_style": "", "collapsed": true, "layout": "IPY_MODEL_24b6b6edeefe4618affabfddaac2a5c9", "orientation": "vertical", "toolitems": [["Home", "Reset original view", "home", "home"], ["Back", "Back to previous view", "arrow-left", "back"], ["Forward", "Forward to next view", "arrow-right", "forward"], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "arrows", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "square-o", "zoom"], ["Download", "Download plot", "floppy-o", "save_figure"]]}}}, "version_major": 2, "version_minor": 0}
-</script>
-
+</div>
 
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
         binderOptions: {
-            repo: "CarlosECarrilloGallegos/EBM",
+            repo: "binder-examples/jupyter-stacks-datascience",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -348,11 +357,11 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="EnergySlider_Tutorial.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="Temp_integrator_interactive.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Real-Time Energy Balance Model (Tutorial)</p>
+            <p class="prev-next-title">Earth Temperature Integrator (Interactive)</p>
         </div>
     </a>
 </div>

@@ -44,9 +44,9 @@
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
-        const thebe_selector = ".thebe,.cell"
-        const thebe_selector_input = "pre,.cell_input div.highlight"
-        const thebe_selector_output = ".output,.cell_output"
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -103,17 +103,12 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_Integrator_tutorial.html">
-   Earth Temperature Integrator (Tutorial)
+   Earth Temperature Integrator (Background)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_integrator_interactive.html">
    Earth Temperature Integrator (Interactive)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="EnergySlider_Tutorial.html">
-   Real-Time Energy Balance Model (Tutorial)
   </a>
  </li>
  <li class="toctree-l1">
@@ -217,7 +212,7 @@
 <p>It starts with a simple integrator to evolve the Earth’s temperature over time given variable initial conditions. Then, we build an animated slider that can vary the Earth’s temperature in real time.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In order to run the interactive features of this code, you must launch the .ipynb files with Binder (the rocket on the top bar).</p>
+<p>In order to run the interactive features of this code, you must launch the .ipynb files with the Binder link at the beginning of every notebook. The rocket on the top bar is not yet functional.</p>
 </div>
 <div class="toctree-wrapper compound">
 </div>
@@ -227,7 +222,7 @@
     {
         requestKernel: true,
         binderOptions: {
-            repo: "CarlosECarrilloGallegos/EBM",
+            repo: "binder-examples/jupyter-stacks-datascience",
             ref: "master",
         },
         codeMirrorConfig: {

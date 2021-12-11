@@ -44,15 +44,15 @@
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
-        const thebe_selector = ".thebe,.cell"
-        const thebe_selector_input = "pre,.cell_input div.highlight"
-        const thebe_selector_output = ".output,.cell_output"
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Real-Time Energy Balance Model (Tutorial)" href="EnergySlider_Tutorial.html" />
-    <link rel="prev" title="Earth Temperature Integrator (Tutorial)" href="Temp_Integrator_tutorial.html" />
+    <link rel="next" title="Real-Time Energy-Balance Model (Interactive)" href="EnergySlider_Interactive.html" />
+    <link rel="prev" title="Earth Temperature Integrator (Background)" href="Temp_Integrator_tutorial.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -104,17 +104,12 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_Integrator_tutorial.html">
-   Earth Temperature Integrator (Tutorial)
+   Earth Temperature Integrator (Background)
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Earth Temperature Integrator (Interactive)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="EnergySlider_Tutorial.html">
-   Real-Time Energy Balance Model (Tutorial)
   </a>
  </li>
  <li class="toctree-l1">
@@ -204,7 +199,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/master?urlpath=tree/docs/Temp_integrator_interactive.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/main/v2/gh/CarlosECarrilloGallegos/EBM/main?urlpath=tree/docs/Temp_integrator_interactive.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -212,9 +207,6 @@
         
         
         
-        <button type="button" class="btn btn-secondary topbarbtn"
-            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
-                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
         
     </div>
 </div>
@@ -224,6 +216,41 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#integrator">
+   Integrator
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#addition-of-atmosphere">
+     Addition of atmosphere
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#removal-of-emissivity-from-outgoing-flux">
+     Removal of emissivity from outgoing flux
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#integration-over-heat-content">
+     Integration over heat content
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interactivity">
+   Interactivity
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -234,6 +261,7 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="earth-temperature-integrator-interactive">
 <h1>Earth Temperature Integrator (Interactive)<a class="headerlink" href="#earth-temperature-integrator-interactive" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/main"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import libraries</span>
@@ -242,12 +270,34 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.widgets</span> <span class="kn">import</span> <span class="n">Slider</span><span class="p">,</span> <span class="n">Button</span>
 <span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
-<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="section" id="integrator">
+<h2>Integrator<a class="headerlink" href="#integrator" title="Permalink to this headline">¶</a></h2>
+<p>Before we discuss the integrator, I’ll go over the adjustments to the equation we make.</p>
+<div class="section" id="addition-of-atmosphere">
+<h3>Addition of atmosphere<a class="headerlink" href="#addition-of-atmosphere" title="Permalink to this headline">¶</a></h3>
+<p>To account for the atmosphere, we simply add on another flux term to the right side. This time, it’s possitive as it represents flux being sent back to the Earth from the atmosphere.</p>
+<p>We use the term: emissivity * sigma * Temp_Atmosphere^4</p>
+<p>For simplicity, we use an estimate for Temp_Atmosphere = 242.4 K.</p>
+</div>
+<div class="section" id="removal-of-emissivity-from-outgoing-flux">
+<h3>Removal of emissivity from outgoing flux<a class="headerlink" href="#removal-of-emissivity-from-outgoing-flux" title="Permalink to this headline">¶</a></h3>
+<p>In this model, we use the emissivity as a property of the atmosphere, so we do not multiply the outgoing flux by it.</p>
+</div>
+<div class="section" id="integration-over-heat-content">
+<h3>Integration over heat content<a class="headerlink" href="#integration-over-heat-content" title="Permalink to this headline">¶</a></h3>
+<p>We actually wont integrate directly over the temeprature, but rather over the heat content, descirbed by:</p>
+<p>C * dT/dt = dH/dt, where dH/dt is the heat content.</p>
+<p>We can then find the temperature at each step by dividing the heat content by C.</p>
+</div>
+</div>
+<div class="section" id="interactivity">
+<h2>Interactivity<a class="headerlink" href="#interactivity" title="Permalink to this headline">¶</a></h2>
+<p>The code allows the user to input the emissivity, albedo, and solar flux. These initial conditions will change how the planet’s temperature evolves. An animation shows the results and whether the planet will approach a habitable temperature. The integrator starts with a surface temperature T = 0 K.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Set up integrator</span>
@@ -285,23 +335,9 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">StdinNotImplementedError</span><span class="g g-Whitespace">                  </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">002</span><span class="n">c518330c1</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1">#constants</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">C</span> <span class="o">=</span> <span class="mf">2.08e8</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">alpha</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the starting albedo (between 0 and 1.0): &quot;</span><span class="p">))</span> <span class="c1">#Best = 0.32</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the starting emissivity (between 0 and 1.0): &quot;</span><span class="p">))</span> <span class="c1">#Best = 0.78</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">5.67e-8</span>
-
-<span class="nn">~/opt/anaconda3/envs/a330/lib/python3.8/site-packages/ipykernel/kernelbase.py</span> in <span class="ni">raw_input</span><span class="nt">(self, prompt)</span>
-<span class="g g-Whitespace">    </span><span class="mi">843</span>         <span class="s2">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">844</span><span class="s2">         if not self._allow_stdin:</span>
-<span class="ne">--&gt; </span><span class="mi">845</span><span class="s2">             raise StdinNotImplementedError(</span>
-<span class="g g-Whitespace">    </span><span class="mi">846</span><span class="s2">                 &quot;raw_input was called, but this frontend does not support input requests.&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">847</span><span class="s2">             )</span>
-
-<span class="ne">StdinNotImplementedError</span>: raw_input was called, but this frontend does not support input requests.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Enter the starting albedo (between 0 and 1.0):  0.9
+Enter the starting emissivity (between 0 and 1.0):  0.1
+Enter the starting solar flux:  2200
 </pre></div>
 </div>
 </div>
@@ -310,19 +346,19 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Set up animation</span>
 
+<span class="c1">#initialize arrays</span>
 <span class="n">step</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Earth Temperature Evolution&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Step&#39;</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Temperature (K)&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">((</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">280</span><span class="p">),</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">add_patch</span><span class="p">((</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">280</span><span class="p">),</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)))</span> <span class="c1">#add habitable patch</span>
 
 <span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
     <span class="n">step</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -337,8 +373,9 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "61682bb982bd4648b6b971bfd3d2b7f1", "version_major": 2, "version_minor": 0}
+{"model_id": "be74ad0b2eef4ad78ebfbf456d361cd6", "version_major": 2, "version_minor": 0}
 </script></div>
+</div>
 </div>
 </div>
 
@@ -346,7 +383,7 @@
     {
         requestKernel: true,
         binderOptions: {
-            repo: "CarlosECarrilloGallegos/EBM",
+            repo: "binder-examples/jupyter-stacks-datascience",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -371,13 +408,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Earth Temperature Integrator (Tutorial)</p>
+            <p class="prev-next-title">Earth Temperature Integrator (Background)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="EnergySlider_Tutorial.html" title="next page">
+    <a class='right-next' id="next-link" href="EnergySlider_Interactive.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Real-Time Energy Balance Model (Tutorial)</p>
+        <p class="prev-next-title">Real-Time Energy-Balance Model (Interactive)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Earth Temperature Integrator (Tutorial) &#8212; A Simple Energy Balance Model</title>
+    <title>Earth Temperature Integrator (Background) &#8212; A Simple Energy Balance Model</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -44,9 +44,9 @@
     <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
-        const thebe_selector = ".thebe,.cell"
-        const thebe_selector_input = "pre,.cell_input div.highlight"
-        const thebe_selector_output = ".output,.cell_output"
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -104,17 +104,12 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Earth Temperature Integrator (Tutorial)
+   Earth Temperature Integrator (Background)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Temp_integrator_interactive.html">
    Earth Temperature Integrator (Interactive)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="EnergySlider_Tutorial.html">
-   Real-Time Energy Balance Model (Tutorial)
   </a>
  </li>
  <li class="toctree-l1">
@@ -163,9 +158,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/Temp_Integrator_tutorial.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="_sources/Temp_Integrator_tutorial.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -198,26 +193,6 @@
             class="fas fa-expand"></i></button></a>
 
             <!-- Launch buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/CarlosECarrilloGallegos/EBM/master?urlpath=tree/docs/Temp_Integrator_tutorial.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        <button type="button" class="btn btn-secondary topbarbtn"
-            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
-                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
-        
-    </div>
-</div>
 
         </div>
 
@@ -272,8 +247,8 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="earth-temperature-integrator-tutorial">
-<h1>Earth Temperature Integrator (Tutorial)<a class="headerlink" href="#earth-temperature-integrator-tutorial" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="earth-temperature-integrator-background">
+<h1>Earth Temperature Integrator (Background)<a class="headerlink" href="#earth-temperature-integrator-background" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="objective">
 <h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
 <p>We want to build an integrator that evolves the Earth’s temperature over time given certain initial conditions.</p>
@@ -301,6 +276,13 @@
 </div>
 <div class="section" id="equations">
 <h2>Equations<a class="headerlink" href="#equations" title="Permalink to this headline">¶</a></h2>
+<p><img alt="image.png" src="_images/eqn.png" /></p>
+<p>This is the equation that ties everything we’ve discussed together.</p>
+<p>C is the heat capacity of Earth, a constant.</p>
+<p>dT/dt is the change in surface temperature of Earth over time.</p>
+<p>The first term on the right represents the flux from the sun that the surface recieves. S represents the solar flux, and alpha the albedo. The scaling factor of 1/4 comes from the derivation (see: Stefan-Boltzman Law).</p>
+<p>The second term on the right represents the energy that the Earth radiates back to space, with epsilon being the emissivity and sigma being the stefan boltzman constant.</p>
+<p>We make some slight adjustments to this equation when integrating, but that will be discussed more with the actual code. In particular, we’ll be incorporating a term for the atmosphere (not found in this version).</p>
 </div>
 </div>
 
@@ -308,7 +290,7 @@
     {
         requestKernel: true,
         binderOptions: {
-            repo: "CarlosECarrilloGallegos/EBM",
+            repo: "binder-examples/jupyter-stacks-datascience",
             ref: "master",
         },
         codeMirrorConfig: {
